@@ -1,19 +1,76 @@
 <!doctype html><meta charset="utf-8"/>
 <title>Yakındaki Bayiler</title>
-<style>body{font-family:system-ui,Arial;margin:24px;max-width:720px}li{padding:12px 0;border-bottom:1px solid #eee}</style>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<style>
+  body{font-family:system-ui,Segoe UI,Arial;margin:24px;max-width:720px}
+  h1{margin:0 0 12px}
+  .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:8px 0 16px}
+  input,button{padding:8px 12px;border:1px solid #ccc;border-radius:8px}
+  button{cursor:pointer}
+  .muted{color:#666;font-size:14px}
+  li{padding:12px 0;border-bottom:1px solid #eee}
+</style>
+
 <h1>Yakındaki Bayiler</h1>
-<button id="btn">Konumumu kullan</button>
-<input id="q" placeholder="Ürün adı (opsiyonel)" style="margin-left:8px"/>
+<div class="row">
+  <button id="btn">Konumumu kullan</button>
+  <input id="q" placeholder="Ürün adı (örn: Bakır, Kükürt)" />
+  <span id="status" class="muted"></span>
+</div>
+
 <ul id="list"></ul>
+
 <script>
-const btn=document.getElementById('btn'), list=document.getElementById('list'), q=document.getElementById('q');
-btn.onclick=()=>navigator.geolocation.getCurrentPosition(async p=>{
-  list.innerHTML='<li>Yükleniyor…</li>';
-  const {latitude:lat,longitude:lon}=p.coords;
-  const ep=q.value?`/api/nearby-product?lat=${lat}&lon=${lon}&q=${encodeURIComponent(q.value)}`:
-                    `/api/nearby?lat=${lat}&lon=${lon}`;
-  const r=await fetch(ep); const data=await r.json();
-  list.innerHTML=data.map(d=>`<li><b>${d.name}</b><br>${d.address} — ${d.district||''}/${d.province||''}
-    <br>Mesafe: ${d.distance_m>=1000?(d.distance_m/1000).toFixed(1)+' km':Math.round(d.distance_m)+' m'}</li>`).join('');
-},()=>alert('Konum izni verilmedi'));
+const $ = s => document.querySelector(s)
+const statusEl = $("#status"), listEl = $("#list"), qEl = $("#q"), btn = $("#btn")
+
+function fmtDistance(m){
+  if (m == null) return "-"
+  return m >= 1000 ? (m/1000).toFixed(1) + " km" : Math.round(m) + " m"
+}
+function render(items){
+  if(!items.length){ listEl.innerHTML = "<li>Sonuç bulunamadı.</li>"; return }
+  listEl.innerHTML = items.map(d => `
+    <li>
+      <strong>${d.name}</strong><br/>
+      ${[d.address, d.district, d.province].filter(Boolean).join(" / ")}<br/>
+      Mesafe: ${fmtDistance(d.distance_m)}
+      ${d.phone ? `<br/>Tel: ${d.phone}` : ""}
+      ${d.whatsapp ? `<br/>WhatsApp: ${d.whatsapp}` : ""}
+    </li>
+  `).join("")
+}
+
+async function load(lat, lon){
+  const q = qEl.value.trim()
+  const url = q
+    ? `/api/nearby-product?lat=${lat}&lon=${lon}&q=${encodeURIComponent(q)}&lim=10`
+    : `/api/nearby?lat=${lat}&lon=${lon}&lim=10`
+  statusEl.textContent = "Yükleniyor…"
+  const r = await fetch(url)
+  if(!r.ok){
+    const t = await r.text()
+    statusEl.textContent = "Hata: " + t
+    listEl.innerHTML = ""
+    return
+  }
+  const data = await r.json()
+  statusEl.textContent = `${data.length} sonuç`
+  render(data)
+}
+
+btn.onclick = () => {
+  if(!navigator.geolocation){
+    statusEl.textContent = "Tarayıcında konum desteği yok."
+    return
+  }
+  statusEl.textContent = "Konum alınıyor…"
+  navigator.geolocation.getCurrentPosition(
+    pos => load(pos.coords.latitude, pos.coords.longitude),
+    err => { statusEl.textContent = "Konum izni verilmedi."; }
+  )
+}
+
+// Enter ile arama
+qEl.addEventListener("keydown", e => { if(e.key === "Enter") btn.click() })
 </script>
