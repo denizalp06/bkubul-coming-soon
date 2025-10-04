@@ -1,0 +1,19 @@
+<!doctype html><meta charset="utf-8"/>
+<title>Yakındaki Bayiler</title>
+<style>body{font-family:system-ui,Arial;margin:24px;max-width:720px}li{padding:12px 0;border-bottom:1px solid #eee}</style>
+<h1>Yakındaki Bayiler</h1>
+<button id="btn">Konumumu kullan</button>
+<input id="q" placeholder="Ürün adı (opsiyonel)" style="margin-left:8px"/>
+<ul id="list"></ul>
+<script>
+const btn=document.getElementById('btn'), list=document.getElementById('list'), q=document.getElementById('q');
+btn.onclick=()=>navigator.geolocation.getCurrentPosition(async p=>{
+  list.innerHTML='<li>Yükleniyor…</li>';
+  const {latitude:lat,longitude:lon}=p.coords;
+  const ep=q.value?`/api/nearby-product?lat=${lat}&lon=${lon}&q=${encodeURIComponent(q.value)}`:
+                    `/api/nearby?lat=${lat}&lon=${lon}`;
+  const r=await fetch(ep); const data=await r.json();
+  list.innerHTML=data.map(d=>`<li><b>${d.name}</b><br>${d.address} — ${d.district||''}/${d.province||''}
+    <br>Mesafe: ${d.distance_m>=1000?(d.distance_m/1000).toFixed(1)+' km':Math.round(d.distance_m)+' m'}</li>`).join('');
+},()=>alert('Konum izni verilmedi'));
+</script>
