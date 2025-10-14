@@ -10,6 +10,11 @@
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://bkubul.com">
   <meta name="theme-color" content="#0ea5e9">
+  <!-- X (Twitter) kartları -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@bkubulcom">
+  <meta name="twitter:title" content="bkubul — yakındaki yetkili bayiyi bul">
+  <meta name="twitter:description" content="Bitki koruma ürünleri için yetkili bayileri il/ilçe ve mesafeye göre bul.">
   <style>
     :root { --bg:#0b1020; --ink:#e5f3ff; --sub:#a7c0d8; --pill:#0ea5e9; --muted:#0f1a33; }
     * { box-sizing: border-box; }
@@ -34,6 +39,7 @@
     .muted { color: var(--sub); font-size: 12px; }
     .sp { height: 10px; }
     .badge { font-size: 11px; padding: 4px 8px; background: var(--muted); border-radius: 999px; border:1px solid rgba(255,255,255,0.08); }
+    .divider { height:1px; background: rgba(255,255,255,0.08); margin: 14px 0; border-radius: 1px; }
   </style>
 </head>
 <body>
@@ -42,15 +48,32 @@
     <div class="logo">bkubul</div>
     <h1>Bitki koruma ürünlerinde <u>yakındaki yetkili bayiyi</u> bulmaya hazır mısın?</h1>
     <p class="lead">bkubul.com yakında yayında. Üreticiler için “bitki/sorun → etken madde → ruhsatlı ürün → en yakın stoklu bayi” akışı tek yerde.</p>
+
     <div class="grid">
-      <a class="btn primary" href="mailto:denizalp@yandex.com?subject=Üretici%20Erken%20Erişim%20Talebi%20-%20bkubul&body=Merhaba%2C%20ben%20(Ad%20Soyad)%2C%20(İl%2Fİlçe)%2E%20Erken%20erişim%20talep%20ediyorum.%0ATelefon%3A%20" target="_blank" rel="noopener">Üretici — erken erişim iste</a>
-      <a class="btn" href="mailto:denizalp@yandex.com?subject=Bayi%20Ön%20Kayıt%20-%20bkubul&body=Merhaba%2C%20(Bayi%20Adı)%2C%20(İl%2Fİlçe)%2E%20Yetkili%20bayiyiz%2E%20İletişim%3A%20" target="_blank" rel="noopener">Bayi — ön kayıt</a>
+      <a class="btn primary" href="mailto:denizalp@yandex.com?subject=%C3%9Cretici%20Erken%20Eri%C5%9Fim%20Talebi%20-%20bkubul&body=Merhaba%2C%20ben%20(Ad%20Soyad)%2C%20(%C4%B0l%2F%C4%B0l%C3%A7e)%2E%20Erken%20eri%C5%9Fim%20talep%20ediyorum.%0ATelefon%3A%20" target="_blank" rel="noopener">Üretici — erken erişim iste</a>
+      <a class="btn" href="mailto:denizalp@yandex.com?subject=Bayi%20%C3%96n%20Kay%C4%B1t%20-%20bkubul&body=Merhaba%2C%20(Bayi%20Ad%C4%B1)%2C%20(%C4%B0l%2F%C4%B0l%C3%A7e)%2E%20Yetkili%20bayiyiz%2E%20%C4%B0leti%C5%9Fim%3A%20" target="_blank" rel="noopener">Bayi — ön kayıt</a>
     </div>
+
     <div class="sp"></div>
     <div class="grid">
       <a class="btn" href="https://instagram.com/bkubulcom" target="_blank" rel="noopener">Instagram'da takip et @bkubulcom</a>
-      <a class="btn" href="https://x.com/intent/follow?screen_name=bkubulcom" target="_blank" rel="noopener">X (Twitter) hesabını takip et</a>
+      <!-- X: intent yerine doğrudan profil linki -->
+      <a class="btn" href="https://x.com/bkubulcom" target="_blank" rel="noopener">X’te takip et @bkubulcom</a>
     </div>
+
+    <div class="sp"></div>
+    <div class="divider"></div>
+
+    <!-- Resmî Follow butonu (widgets.js ile) -->
+    <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+      <span class="muted">Hızlı takip:</span>
+      <a href="https://twitter.com/bkubulcom" class="twitter-follow-button" data-show-count="false">Follow @bkubulcom</a>
+    </div>
+
+    <!-- İsteğe bağlı: küçük bir zaman akışı -->
+    <div class="sp"></div>
+    <a class="twitter-timeline" data-height="320" href="https://twitter.com/bkubulcom">@bkubulcom’dan gönderiler</a>
+
     <div class="sp"></div>
     <p class="muted"><span class="badge">Not</span> Şimdilik harita görünümü olmadan “liste + mesafe” odaklı başlayacağız. Yetkili bayiler kendi stoklarını panelden girebilecek.</p>
     <ul class="list">
@@ -59,5 +82,8 @@
     </ul>
     <p class="foot">© <script>document.write(new Date().getFullYear())</script> bkubul • Tüm hakları saklıdır</p>
   </main>
+
+  <!-- widgets.js (Follow & Timeline için bir kez yeter) -->
+  <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 </body>
 </html>
